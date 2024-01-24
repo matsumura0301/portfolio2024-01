@@ -42,6 +42,7 @@ public class AllUserServlet extends HttpServlet {
 			UserControll ucl = new UserControll();
 			userDataList = (ArrayList<UserDTO>) ucl.showAllUser();
 			
+			//全ユーザーのリストを取得し全ユーザ表示ページへ遷移
 			if(userDataList != null) {
 				request.setAttribute("userDataList", userDataList);
 				dispatcher = request.getRequestDispatcher("/showAllUser.jsp");

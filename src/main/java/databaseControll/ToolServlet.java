@@ -40,7 +40,7 @@ public class ToolServlet extends HttpServlet {
 			ArrayList<String> mail = null;
 
 			
-			//登録したデータをオブジェクトに格納
+			//メール本文を作成しリストmailとして格納
 			DatabaseControll dcl = new DatabaseControll();
 			mail = dcl.makeMail();
 				

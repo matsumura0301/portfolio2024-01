@@ -48,7 +48,7 @@ public class DatabaseControll extends AutomailDAO {
 		return data;
 	}
 	
-	//すべてのユーザーを取得しリストとして返すメソッド
+	//すべての文章を取得しリストとして返すメソッド
 	public List<DatabaseDTO> showAllsentence(){
 		List<DatabaseDTO> datalist = new ArrayList<>();
 		

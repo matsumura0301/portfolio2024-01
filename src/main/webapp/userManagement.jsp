@@ -79,14 +79,12 @@
 				<form action="UserAddServlet" method="get">
 					<table>
 						<tr>
-							<th>ユーザーID</th>
-							<td><input type="text" name="user_id" required></td>
 							<th>ユーザー名</th>
-							<td><input type="text" name="userName" required></td>
+							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
 							<th>パスワード</th>
-							<td><input type="password" name="password" required></td>
+							<td><input type="password" name="password" pattern="[a-zA-z]" required></td>
 							<th>ポジション</th>
-							<td><input type="text" name="position" required></td>
+							<td><input type="text" name="position" pattern="(admin | ope)" required></td>
 						</tr>
 						<tr>
 							<td><input type="submit" value="ユーザー追加"></td>
@@ -113,9 +111,29 @@
 					<table>
 						<tr>
 							<th>ユーザー名</th>
-							<td><input type="text" name="userName" required></td>
+							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
 							<th>パスワード</th>
-							<td><input type="password" name="password" required></td>
+							<td><input type="password" name="password" pattern="[a-zA-z]" required></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="ユーザー削除"></td>
+						</tr>
+					</table>
+				</form>
+			</td>
+		</tr>
+		<%--ユーザー情報変更機能 --%>
+		<tr>
+			<th>ユーザー情報変更</th>
+			<td>
+				<form action="UpdateUserSearchServle" method="post">
+					<table>
+						<tr>
+							<td>変更したいユーザーの名前を入力してください
+						</tr>
+						<tr>
+							<th>ユーザー名</th>
+							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
 						</tr>
 						<tr>
 							<td><input type="submit" value="ユーザー削除"></td>

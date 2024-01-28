@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class UserControll extends AutomailDAO{
 	PreparedStatement pstmt = null;
 	ResultSet rset = null;
 
-	//ログインの際に入力と合致したユーザーのデータを取得するメソッド
+	//名前とパスワードが合致したユーザーのデータを取得するメソッド
 	public UserDTO getLoginUser(String userName,String password) {
 
 		String sql = "SELECT * FROM user WHERE userName=? AND password=?";
@@ -32,6 +33,40 @@ public class UserControll extends AutomailDAO{
 			//該当するテーブルをオブジェクトに格納
 			if(rset.next()) {
 				user = new UserDTO();
+				user.setUserName(rset.getString(2));
+				user.setPassword(rset.getString(3));
+				user.setPosition(rset.getString(4));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+			close(conn);
+		}
+		return user;
+	}
+	//名前が合致したユーザーのデータを取得するメソッド
+	public UserDTO getUser(String userName) {
+
+		String sql = "SELECT * FROM user WHERE userName=?";
+
+		UserDTO user = null;
+
+		try {
+			//データベース接続
+			conn = getConnection();
+
+			//SELECT分の実行
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userName);
+			rset = pstmt.executeQuery();
+
+			//該当するテーブルをオブジェクトに格納
+			if(rset.next()) {
+				user = new UserDTO();
+				user.setUser_id(rset.getInt(1));
 				user.setUserName(rset.getString(2));
 				user.setPassword(rset.getString(3));
 				user.setPosition(rset.getString(4));
@@ -79,13 +114,24 @@ public class UserControll extends AutomailDAO{
 		}
 		return datalist;
 	}
+	
 	//ユーザーを追加するメソッド
-	public void addUser(int user_id,String userName,String password,String position) {
+	public void addUser(String userName,String password,String position) {
 		String sql ="INSERT INTO user VALUES(?,?,?,?);";
+		String getMaxIdSql = "SELECT MAX(user_id) AS max_id FROM user;";
 
 		try {
 			
 			conn = getConnection();
+			
+
+	        // ユーザーIDの取得
+	        int user_id = 0;
+	        Statement stmt = conn.createStatement();
+	        ResultSet rs = stmt.executeQuery(getMaxIdSql);
+	        if (rs.next()) {
+	            user_id = rs.getInt("max_id") + 1;
+	        }
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -105,6 +151,7 @@ public class UserControll extends AutomailDAO{
 			close(conn);
 		}
 	}
+	
 	//ユーザーを削除するメソッド
 	public int deleteUser(String userName,String password) {
 		String sql ="DELETE FROM user WHERE userName=? AND password=?";
@@ -130,8 +177,31 @@ public class UserControll extends AutomailDAO{
 		}
 		return affectedRows;
 	}
-	//ユーザーのパスワードを変更するメソッド
-	//public void updateUserPassword() {
-		//String sql = "UPDATE user SET ";
-	//}
+	//ユーザーのレコードを変更するメソッド
+	public int updateUser(String userName,String password,String position) {
+		String sql ="UPDATE user SET userName=?, password=?, position=? WHERE userId=?";
+		int updateRows = 0;
+		
+		try {
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userName);
+			pstmt.setString(2, password);
+			pstmt.setString(3, position);
+			
+			
+			updateRows = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+			close(conn);
+		}
+		return updateRows;
+	}
 }

@@ -8,19 +8,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class UserAddServlet
+ * Servlet implementation class UpdateUserServlet
  */
-@WebServlet("/UserAddServlet")
-public class UserAddServlet extends HttpServlet {
+@WebServlet("/UpdateUserServlet")
+public class UpdateUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserAddServlet() {
+    public UpdateUserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,7 +28,6 @@ public class UserAddServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		try {
 			//文字化け対策
 			request.setCharacterEncoding("UTF-8");
@@ -37,32 +35,34 @@ public class UserAddServlet extends HttpServlet {
 		
 			//転送の準備およびメッセージの用意
 			RequestDispatcher dispatcher = null;
-			UserDTO user = null;
+			String message = null;
 			
 			//リクエストデータの格納
-			String userName = request.getParameter("userName");
-			String password = request.getParameter("password");
-			String position = request.getParameter("position");
+	        String userName = request.getParameter("userName");
+	        String password = request.getParameter("password");
+	        String position = request.getParameter("position");
 
-				//登録
+				//入力された名前と一致したデータをオブジェクトへ
 				UserControll ucl = new UserControll();
-				ucl.addUser(userName,password,position);
+				int updateRows = ucl.updateUser(userName,password,position);
 				
-				//登録したデータをオブジェクトに格納
-				user = ucl.getLoginUser(userName, password);
-				
-				//上記のオブジェクトをセッションスコープに入れてユーザー管理画面に遷移
-				HttpSession session = request.getSession();
-				session.setAttribute("userAdd", user);
-				dispatcher = request.getRequestDispatcher("/userManagement.jsp");
-				dispatcher.forward(request, response);
-
+				//成否をメッセージで通知
+	            if (updateRows > 0) {
+	            	message = "変更しました";
+					request.setAttribute("alert", message);
+					dispatcher = request.getRequestDispatcher("/updateUser.jsp");
+					dispatcher.forward(request, response);
+	            } else {
+	               message = "変更に失敗しました";
+	               request.setAttribute("alert", message);
+	               dispatcher = request.getRequestDispatcher("/updateUser.jsp");
+	               dispatcher.forward(request, response);
+	            }
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.jsp");
 		}
 	}
-
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

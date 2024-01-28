@@ -33,6 +33,5 @@
 			</td>
 		</tr>
 	</c:if>
-<a href="admin.jsp" class="btn">管理者ページにもどる</a>
 </body>
 </html>

@@ -37,6 +37,7 @@ public class UserAddServlet extends HttpServlet {
 		
 			//転送の準備およびメッセージの用意
 			RequestDispatcher dispatcher = null;
+			String userAddMessage = null;
 			UserDTO user = null;
 			
 			//リクエストデータの格納
@@ -44,19 +45,25 @@ public class UserAddServlet extends HttpServlet {
 			String password = request.getParameter("password");
 			String position = request.getParameter("position");
 
-				//登録
-				UserControll ucl = new UserControll();
-				ucl.addUser(userName,password,position);
+			//登録
+			UserControll ucl = new UserControll();
+			ucl.addUser(userName,password,position);
 				
-				//登録したデータをオブジェクトに格納
-				user = ucl.getLoginUser(userName, password);
-				
-				//上記のオブジェクトをセッションスコープに入れてユーザー管理画面に遷移
-				HttpSession session = request.getSession();
-				session.setAttribute("userAdd", user);
-				dispatcher = request.getRequestDispatcher("/userManagement.jsp");
-				dispatcher.forward(request, response);
-
+			//登録したデータをオブジェクトに格納
+			user = ucl.getLoginUser(userName, password);
+			
+				if(user != null) {
+					//上記のオブジェクトをセッションスコープに入れてユーザー管理画面に遷移
+					HttpSession session = request.getSession();
+					session.setAttribute("userAdd", user);
+					dispatcher = request.getRequestDispatcher("/userManagement.jsp");
+					dispatcher.forward(request, response);
+				}else {
+					userAddMessage = "追加できませんでした";
+					request.setAttribute("userAddMessage", userAddMessage);
+					dispatcher = request.getRequestDispatcher("/userManagement.jsp");
+					dispatcher.forward(request, response);	
+				}
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.jsp");

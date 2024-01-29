@@ -46,7 +46,6 @@
 <a href="admin.jsp" class="btn">管理者ページにもどる</a>
     <h3>ユーザー一覧</h3>
     
-    <%-- サーブレットから渡されたArrayList（"userDataList"）を取得 --%>
     <%
         ArrayList<UserDTO> userDataList = (ArrayList<UserDTO>) request.getAttribute("userDataList");
     %>

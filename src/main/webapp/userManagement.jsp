@@ -107,7 +107,14 @@
 					<p>を追加しました</p>
 				</td>
 			</tr>
-		</c:if>			
+		</c:if>	
+		<c:if test="${requestScope.userAddMessage != null}">
+			<tr>
+				<td>
+					<c:out value="${requestScope.userAddMessage}"/>
+				</td>
+			</tr>
+		</c:if>				
 		</tr>
 		<%--ユーザー削除機能 --%>
 		<tr>

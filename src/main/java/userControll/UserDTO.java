@@ -1,16 +1,17 @@
 package userControll;
 
 public class UserDTO {
-	private int User_id;
+	private int userId;
 	private String userName;
 	private String password;
 	private String position;
 
-	public int getUser_id() {
-		return User_id;
+
+	public int getUserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		User_id = user_id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public String getUserName() {
 		return userName;

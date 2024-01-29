@@ -38,26 +38,27 @@ public class UpdateUserServlet extends HttpServlet {
 			String message = null;
 			
 			//リクエストデータの格納
+			int userId = Integer.parseInt(request.getParameter("userId"));
 	        String userName = request.getParameter("userName");
 	        String password = request.getParameter("password");
 	        String position = request.getParameter("position");
 
-				//入力された名前と一致したデータをオブジェクトへ
-				UserControll ucl = new UserControll();
-				int updateRows = ucl.updateUser(userName,password,position);
+			//入力された名前と一致したデータをオブジェクトへ
+			UserControll ucl = new UserControll();
+			int updateRows = ucl.updateUser(userName,password,position,userId);
 				
-				//成否をメッセージで通知
-	            if (updateRows > 0) {
-	            	message = "変更しました";
-					request.setAttribute("alert", message);
-					dispatcher = request.getRequestDispatcher("/updateUser.jsp");
-					dispatcher.forward(request, response);
-	            } else {
-	               message = "変更に失敗しました";
-	               request.setAttribute("alert", message);
-	               dispatcher = request.getRequestDispatcher("/updateUser.jsp");
-	               dispatcher.forward(request, response);
-	            }
+			//成否をメッセージで通知
+	        if (updateRows > 0) {
+	        	message = "変更しました";
+				request.setAttribute("alert", message);
+				dispatcher = request.getRequestDispatcher("/updateUser.jsp");
+				dispatcher.forward(request, response);
+	        } else {
+	        	message = "変更に失敗しました";
+	        	request.setAttribute("alert", message);
+	        	dispatcher = request.getRequestDispatcher("/updateUser.jsp");
+	        	dispatcher.forward(request, response);
+	        }
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.jsp");

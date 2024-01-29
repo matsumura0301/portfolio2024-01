@@ -66,7 +66,7 @@ public class UserControll extends AutomailDAO{
 			//該当するテーブルをオブジェクトに格納
 			if(rset.next()) {
 				user = new UserDTO();
-				user.setUser_id(rset.getInt(1));
+				user.setUserId(rset.getInt(1));
 				user.setUserName(rset.getString(2));
 				user.setPassword(rset.getString(3));
 				user.setPosition(rset.getString(4));
@@ -118,24 +118,23 @@ public class UserControll extends AutomailDAO{
 	//ユーザーを追加するメソッド
 	public void addUser(String userName,String password,String position) {
 		String sql ="INSERT INTO user VALUES(?,?,?,?);";
-		String getMaxIdSql = "SELECT MAX(user_id) AS max_id FROM user;";
+		String getMaxIdSql = "SELECT MAX(userId) AS maxId FROM user;";
 
 		try {
 			
 			conn = getConnection();
 			
-
 	        // ユーザーIDの取得
-	        int user_id = 0;
-	        Statement stmt = conn.createStatement();
-	        ResultSet rs = stmt.executeQuery(getMaxIdSql);
-	        if (rs.next()) {
-	            user_id = rs.getInt("max_id") + 1;
-	        }
+			int userId = 0;
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(getMaxIdSql);
+			if (rs.next()) {
+				userId = rs.getInt("maxId") + 1;
+			}
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, user_id);
+			pstmt.setInt(1, userId);
 			pstmt.setString(2, userName);
 			pstmt.setString(3, password);
 			pstmt.setString(4, position);
@@ -178,7 +177,7 @@ public class UserControll extends AutomailDAO{
 		return affectedRows;
 	}
 	//ユーザーのレコードを変更するメソッド
-	public int updateUser(String userName,String password,String position) {
+	public int updateUser(String userName,String password,String position,int userId) {
 		String sql ="UPDATE user SET userName=?, password=?, position=? WHERE userId=?";
 		int updateRows = 0;
 		
@@ -191,7 +190,7 @@ public class UserControll extends AutomailDAO{
 			pstmt.setString(1, userName);
 			pstmt.setString(2, password);
 			pstmt.setString(3, position);
-			
+			pstmt.setInt(4, userId);
 			
 			updateRows = pstmt.executeUpdate();
 			

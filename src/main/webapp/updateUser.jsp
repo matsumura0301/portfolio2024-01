@@ -45,45 +45,62 @@
 <body>
 <a href="admin.jsp" class="btn">管理者ページにもどる</a>
       
-    <c:forEach var="user" items="${userDataList}">
-        <table class="table table-striped table-bordered">
-        	<tr>
-        		<td>変更対象ユーザー
-        	</tr>
-            <tr>
-                <th>ユーザーID</th>
-                <td>${user.user_ID}</td>
-            </tr>
-            <tr>
-                <th>ユーザー名</th>
-                <td>${user.userName}</td>
-            </tr>
-            <tr>
-                <th>パスワード</th>
-                <td>${user.password}</td>
-            </tr>
-            <tr>
-                <th>役職</th>
-                <td>${user.position}</td>
-            </tr>
-        </table>
-    </c:forEach>
+
+<table class="table table-striped table-bordered">
+	<tr>
+		<td>変更対象ユーザー
+	</tr>
+	<tr>
+		<th>ユーザーID</th>
+		<td>${getUser.userId}</td>
+	</tr>
+	<tr>
+		<th>ユーザー名</th>
+		<td>${getUser.userName}</td>
+	</tr>
+	<tr>
+		<th>パスワード</th>
+		<td>${getUser.password}</td>
+	</tr>
+	<tr>
+		<th>ポジション</th>
+		<td>${getUser.position}</td>
+	</tr>
+</table>
+
     
 	<form action="UpdateUserServlet" method="get">
 		<table>
 			<tr>
+				<%--ユーザーIDは隠してサーブレットに情報を転送する --%>
+				<input type="hidden" name="userId" value="${getUser.userId}">
 				<th>ユーザー名</th>
-					<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
+					<td><input type="text" name="userName" pattern="[a-zA-z]+" id="userNameInput"></td>
 				<th>パスワード</th>
-					<td><input type="password" name="password" pattern="[a-zA-z]" required></td>
+					<td><input type="password" name="password" pattern="[a-zA-Z0-9]+" id="passwordInput"></td>
 				<th>ポジション</th>
-					<td><input type="text" name="position" pattern="(admin | ope)" required></td>
+					<td>
+						<select name="position" id="positionSelect" >
+							<option value="admin">admin</option>
+        					<option value="ope">ope</option>
+    					</select>
+					</td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="ユーザー情報変更"></td>
 			</tr>
 		</table>
 	</form>
+	
+<script>
+   	// JavaScriptで動的なデフォルト値を設定
+	document.getElementById("userNameInput").value = "${getUser.userName}";
+   	document.getElementById("passwordInput").value = "${getUser.password}";
+
+   	var positionValue = "${getUser.position}";
+	if (positionValue) {document.getElementById("positionSelect").value = positionValue;}
+</script>	
+	
 	<c:if
 		test="${requestScope.alert != null && requestScope.alert != ''}">
 		<tr>

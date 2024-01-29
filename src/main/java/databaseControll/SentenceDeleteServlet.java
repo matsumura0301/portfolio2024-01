@@ -35,7 +35,7 @@ public class SentenceDeleteServlet extends HttpServlet {
 		
 			//転送の準備およびメッセージの用意
 			int affectedRows = 0;
-			String message = null;
+			String deleteMessage = null;
 			RequestDispatcher dispatcher = null;
 			
 			//リクエストデータの格納
@@ -45,17 +45,22 @@ public class SentenceDeleteServlet extends HttpServlet {
 			//削除
 			DatabaseControll dcl = new DatabaseControll();
 			affectedRows = dcl.deleteSetence(sentenceId,sentenceName);
-				
+			
+			//削除成功
 			if(affectedRows > 0) {
-			message = (sentenceName + "を削除しました。");
+			deleteMessage = (sentenceName + "を削除しました。");
+			request.setAttribute("deleteAlert", deleteMessage);
+			dispatcher = request.getRequestDispatcher("/databaseManagement.jsp");
+			dispatcher.forward(request, response);
+			//削除失敗
 			}else {
-			message = "該当データの削除に失敗しました";
+			deleteMessage = "該当データの削除に失敗しました";
+			request.setAttribute("deleteAlert", deleteMessage);
+			dispatcher = request.getRequestDispatcher("/databaseManagement.jsp");
+			dispatcher.forward(request, response);
 			}
 			
 			//メッセージをリクエストオブジェクトに入れて画面遷移
-			request.setAttribute("alert", message);
-			dispatcher = request.getRequestDispatcher("/databaseManagement.jsp");
-			dispatcher.forward(request, response);
 
 		}catch(Exception e) {
 			e.printStackTrace();

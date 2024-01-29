@@ -80,11 +80,17 @@
 					<table>
 						<tr>
 							<th>ユーザー名</th>
-							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
+							<td><input type="text" name="userName" pattern="[a-zA-Z]+" required></td>
 							<th>パスワード</th>
-							<td><input type="password" name="password" pattern="[a-zA-z]" required></td>
+							<td><input type="password" name="password" pattern="[a-zA-Z0-9]+" required></td>
 							<th>ポジション</th>
-							<td><input type="text" name="position" pattern="(admin | ope)" required></td>
+							<td>
+								<select name="position" required>
+									<option value="">選択してください</option>
+									<option value="admin">admin</option>
+        							<option value="ope">ope</option>
+    							</select>
+							</td>
 						</tr>
 						<tr>
 							<td><input type="submit" value="ユーザー追加"></td>
@@ -111,9 +117,9 @@
 					<table>
 						<tr>
 							<th>ユーザー名</th>
-							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
+							<td><input type="text" name="userName" pattern="[a-zA-Z]+" required></td>
 							<th>パスワード</th>
-							<td><input type="password" name="password" pattern="[a-zA-z]" required></td>
+							<td><input type="password" name="password" pattern="[a-zA-Z0-9]+" required></td>
 						</tr>
 						<tr>
 							<td><input type="submit" value="ユーザー削除"></td>
@@ -122,33 +128,34 @@
 				</form>
 			</td>
 		</tr>
-		<%--ユーザー情報変更機能 --%>
-		<tr>
-			<th>ユーザー情報変更</th>
-			<td>
-				<form action="UpdateUserSearchServle" method="post">
-					<table>
-						<tr>
-							<td>変更したいユーザーの名前を入力してください
-						</tr>
-						<tr>
-							<th>ユーザー名</th>
-							<td><input type="text" name="userName" pattern="[a-zA-z]" required></td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="ユーザー削除"></td>
-						</tr>
-					</table>
-				</form>
-			</td>
-		</tr>
-	<c:if
-		test="${requestScope.alert != null && requestScope.alert != ''}">
+		<c:if
+			test="${requestScope.alert != null && requestScope.alert != ''}">
 		<tr>
 			<td>
 			<c:out value="${requestScope.alert}"/>
 			</td>
 		</tr>
 		</c:if>
+		<%--ユーザー情報変更機能 --%>
+		<tr>
+			<th>ユーザー情報変更</th>
+			<td>
+				<form action="UpdateUserSearchServlet" method="post">
+					<table>
+						<tr>
+							<td>変更したいユーザーの名前を入力してください
+						</tr>
+						<tr>
+							<th>ユーザー名</th>
+							<td><input type="text" name="userName" pattern="[a-zA-Z]+" required></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="ユーザー情報変更へ"></td>
+						</tr>
+					</table>
+				</form>
+			</td>
+		</tr>
+
 </body>
 </html>

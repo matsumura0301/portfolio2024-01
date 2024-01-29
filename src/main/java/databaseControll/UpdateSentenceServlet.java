@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SentenceAddServlet
+ * Servlet implementation class UpdataSentence
  */
-@WebServlet("/SentenceAddServlet")
-public class SentenceAddServlet extends HttpServlet {
+@WebServlet("/UpdateSentenceServlet")
+public class UpdateSentenceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SentenceAddServlet() {
+    public UpdateSentenceServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,7 +28,6 @@ public class SentenceAddServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		try {
 			//文字化け対策
 			request.setCharacterEncoding("UTF-8");
@@ -36,33 +35,33 @@ public class SentenceAddServlet extends HttpServlet {
 		
 			//転送の準備およびメッセージの用意
 			RequestDispatcher dispatcher = null;
-			String addMessage = null;
+			String updataMessage = null;
 			int affectedRows = 0;
 			
 			//リクエストデータの格納
+			int sentenceId = Integer.parseInt(request.getParameter("sentenceId"));
 			String sentenceName = request.getParameter("sentenceName");
 			String sentenceMain = request.getParameter("sentenceMain");
 			int sentenceLine = Integer.parseInt(request.getParameter("sentenceLine"));
 			String sentenceKind = request.getParameter("sentenceKind");
 			String sentenceTemp = request.getParameter("sentenceTemp");
 
-			//登録
+			//入力された名前と一致したデータをオブジェクトへ
 			DatabaseControll dcl = new DatabaseControll();
-			affectedRows = dcl.addSentence(sentenceName,sentenceMain,sentenceLine,sentenceKind,sentenceTemp);
-			
-			//データの登録に成功した場合
-			if(affectedRows > 0) {
-				addMessage ="登録しました";
-				request.setAttribute("addMessage", addMessage);
-				dispatcher = request.getRequestDispatcher("/databaseManagement.jsp");
+			affectedRows = dcl.updateSentence(sentenceName, sentenceMain, sentenceLine,sentenceKind,sentenceTemp,sentenceId);
+				
+			//成否をメッセージで通知
+	        if (affectedRows > 0) {
+	        	updataMessage = "変更しました";
+				request.setAttribute("alert", updataMessage);
+				dispatcher = request.getRequestDispatcher("/updateSentence.jsp");
 				dispatcher.forward(request, response);
-			//データの登録に失敗した場合
-			}else {
-				addMessage = "登録に失敗しました";
-				request.setAttribute("addMessage", addMessage);
-				dispatcher = request.getRequestDispatcher("/databaseManegement.jsp");
-				dispatcher.forward(request, response);
-			}
+	        } else {
+	        	updataMessage = "変更に失敗しました";
+	        	request.setAttribute("alert", updataMessage);
+	        	dispatcher = request.getRequestDispatcher("/updateSentence.jsp");
+	        	dispatcher.forward(request, response);
+	        }
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.jsp");

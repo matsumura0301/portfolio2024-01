@@ -1,4 +1,4 @@
-package userControll;
+package databaseControll;
 
 import java.io.IOException;
 
@@ -11,16 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class UpdateUserSearchServlet
+ * Servlet implementation class UpdateSentenceSearchServlet
  */
-@WebServlet("/UpdateUserSearchServlet")
-public class UpdateUserSearchServlet extends HttpServlet {
+@WebServlet("/UpdateSentenceSearchServlet")
+public class UpdateSentenceSearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UpdateUserSearchServlet() {
+    public UpdateSentenceSearchServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,27 +37,27 @@ public class UpdateUserSearchServlet extends HttpServlet {
 			//転送の準備およびメッセージの用意
 			RequestDispatcher dispatcher = null;
 			String message = null;
-			UserDTO user = null;
+			DatabaseDTO data = null;
 			
 			//リクエストデータの格納
-			String userName = request.getParameter("userName");
+			int sentenceId = Integer.parseInt(request.getParameter("sentenceId"));
 
-				//入力された名前と一致したデータをオブジェクトへ
-				UserControll ucl = new UserControll();
-				user = ucl.getUser(userName);
+			//入力された名前と一致したデータをオブジェクトへ
+			DatabaseControll dcl = new DatabaseControll();
+			data = dcl.getData(sentenceId);
 				
-				if(user != null) {
-					//上記のオブジェクトをセッションスコープに入れてユーザー情報変更画面に遷移
-					HttpSession session = request.getSession();
-					session.setAttribute("getUser", user);
-					dispatcher = request.getRequestDispatcher("/updateUser.jsp");
-					dispatcher.forward(request, response);
-				}else {
-					message = "該当するユーザーが見つかりません";
-					request.setAttribute("alert", message);
-					dispatcher = request.getRequestDispatcher("/userManagement.jsp");
-					dispatcher.forward(request, response);
-				}
+			if(data != null) {
+				//上記のオブジェクトをセッションスコープに入れてユーザー情報変更画面に遷移
+				HttpSession session = request.getSession();
+				session.setAttribute("getData", data);
+				dispatcher = request.getRequestDispatcher("/updateSentence.jsp");
+				dispatcher.forward(request, response);
+			}else {
+				message = "該当するユーザーが見つかりません";
+				request.setAttribute("alert", message);
+				dispatcher = request.getRequestDispatcher("/databaseManagement.jsp");
+				dispatcher.forward(request, response);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.jsp");
